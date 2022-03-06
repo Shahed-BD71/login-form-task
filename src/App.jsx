@@ -16,7 +16,7 @@ export default function App() {
     if (password === repeatPass && email) {
       event.preventDefault();
       alert("it works! check your dev tool");
-      console.log({ email, password });
+      console.log({ email, password , checked});
       clearInputs();
     }
   };
