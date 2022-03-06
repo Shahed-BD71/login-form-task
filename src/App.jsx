@@ -4,6 +4,7 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPass, setRepeatPass] = useState("");
+  const [checked, setChecked] = useState(true);
 
   const clearInputs = () => {
     setEmail("");
@@ -64,10 +65,12 @@ export default function App() {
           value={repeatPass}
           onChange={(event) => setRepeatPass(event.target.value)}
         ></input>
-        <p className="errorMsg">
+        <span className="errorMsg">
           {password !== repeatPass ? <p>Password not match</p> : null}
-        </p>
+        </span>
         <div className="form-footer">
+          <input  onChange={() => setChecked(checked)} type="checkbox" defaultChecked={checked} />
+          <span>Remember Me</span>
           <p>
             By creating an account you agree to our{" "}
             <a href="">Terms & Privacy</a>
