@@ -12,9 +12,9 @@ export const initialState = {
 export default function App() {
   const formElRef = useRef(null);
   const [formState, dispatch] = useStore();
-  const isNotMatchPassword = formState.password !== formState.repeatPass;
+  const isMatchPassword = formState.password === formState.repeatPass;
 
-  const clearInputs= () => {
+  const clearInputs = () => {
     formElRef.current.reset();
     // dispatch({
     //   type: "CLEAR_FORM",
@@ -29,11 +29,13 @@ export default function App() {
       repeatPass: e.target.repeatPass.value,
       checked: e.target.remember.checked,
     };
-    dispatch({
-      type: "HANDLE_SUBMIT",
-      payload: values,
-    });
-    alert('it works! check your dev tools')
+    if (isMatchPassword) {
+      dispatch({
+        type: "HANDLE_SUBMIT",
+        payload: values,
+      });
+    }
+    alert("it works! check your dev tools");
     clearInputs();
   };
   console.log("updated form values", formState);
@@ -78,7 +80,7 @@ export default function App() {
           required
         ></input>
         <span className="errorMsg">
-          {isNotMatchPassword ? <p>Password not match</p> : null}
+          {!isMatchPassword ? <p>Password not match</p> : null}
         </span>
         <div className="form-footer">
           <input name="remember" type="checkbox" />
@@ -92,7 +94,7 @@ export default function App() {
           <button onClick={handleCancel} id="cancel">
             Cancel
           </button>
-          <button disabled={isNotMatchPassword} type="submit" id="sign-up">
+          <button disabled={!isMatchPassword} type="submit" id="sign-up">
             Sign Up
           </button>
         </div>
