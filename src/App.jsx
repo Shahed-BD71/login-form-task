@@ -21,6 +21,7 @@ export default function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    clearInputs();
     const values = {
       email: e.target.email.value,
       password: e.target.password.value,
@@ -31,7 +32,7 @@ export default function App() {
       type: "HANDLE_SUBMIT",
       payload: values,
     });
-    clearInputs()
+    
   };
   console.log("updated form values", formState);
 
@@ -86,7 +87,7 @@ export default function App() {
           </p>
         </div>
         <div className="btn-container">
-          <button onClick={() => handleCancel()} id="cancel">
+          <button onClick={handleCancel} id="cancel">
             Cancel
           </button>
           <button disabled={isNotMatchPassword} type="submit" id="sign-up">
