@@ -12,10 +12,13 @@ export default function Reducer(state, action) {
       };
     case "CLEAR_FORM":
       return {
-        ...state,
         email: "",
         password: "",
-        repeatPass: ""
+        repeatPass: "",
+      };
+    case "HANDLE_SUBMIT":
+      return {
+        ...action.payload,
       };
 
     default:

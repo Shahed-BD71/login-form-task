@@ -1,46 +1,48 @@
-import React, { useReducer } from "react";
+import React from "react";
 import "./App.scss";
-import Reducer from "./Reducer";
+import { useStore } from "./context/FormContext";
+
+export const initialState = {
+  email: "",
+  password: "",
+  repeatPass: "",
+  checked: true,
+};
 
 export default function App() {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [repeatPass, setRepeatPass] = useState("");
-  // const [checked, setChecked] = useState(true);
-
-  const initialState = {
-    email: "",
-    password: "",
-    repeatPass: "",
-    checked: true,
-  };
-
-  const [formState, dispatch] = useReducer(Reducer, initialState);
-  const isMatchPassword = formState.password !== formState.repeatPass ;
+  const [formState, dispatch] = useStore();
+  const isNotMatchPassword = formState.password !== formState.repeatPass;
 
   const clearInputs = () => {
     dispatch({
       type: "CLEAR_FORM",
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const values = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+      repeatPass: e.target.repeatPass.value,
+      checked: e.target.remember.checked,
+    };
     dispatch({
-      type: "HANDLE_INPUT_FIELD",
-      field: e.target.name,
-      payload: e.target.value,
+      type: "HANDLE_SUBMIT",
+      payload: values,
     });
+    clearInputs()
   };
-  
-  const handleCancel = (event) => {
-    event.preventDefault();
+  console.log("updated form values", formState);
+
+  const handleCancel = (e) => {
+    e.preventDefault();
     clearInputs();
   };
 
   return (
     <section className="container">
-      <form className="form-area">
+      <form className="form-area" onSubmit={handleSubmit}>
         <div className="form-header">
           <h2>Sign Up</h2>
           <p>Please Fill up in this Form to creat an account</p>
@@ -48,8 +50,6 @@ export default function App() {
         </div>
         <label>Email</label>
         <input
-          value={formState.email}
-          onChange={(e) => handleSubmit(e)}
           type="email"
           name="email"
           placeholder="Enter Email"
@@ -64,8 +64,6 @@ export default function App() {
           placeholder="Enter Password"
           autoFocus
           required
-          value={formState.password}
-          onChange={(e) => handleSubmit(e)}
         ></input>
         <p className="errorMsg"></p>
         <label>Repeat Password</label>
@@ -75,20 +73,12 @@ export default function App() {
           placeholder="Repeat Password"
           autoFocus
           required
-          value={formState.repeatPass}
-          onChange={(e) => handleSubmit(e)}
         ></input>
         <span className="errorMsg">
-          {isMatchPassword? (
-            <p>Password not match</p>
-          ) : null}
+          {isNotMatchPassword ? <p>Password not match</p> : null}
         </span>
         <div className="form-footer">
-          <input
-            onChange={() => dispatch({ type: "HANDLE_CHECKBOX" })}
-            type="checkbox"
-            defaultChecked={formState.checked}
-          />
+          <input name="remember" type="checkbox" />
           <span>Remember Me</span>
           <p>
             By creating an account you agree to our{" "}
@@ -96,10 +86,10 @@ export default function App() {
           </p>
         </div>
         <div className="btn-container">
-          <button onClick={handleCancel} type="submit" id="cancel">
+          <button onClick={() => handleCancel()} id="cancel">
             Cancel
           </button>
-          <button disabled={isMatchPassword} type="submit" id="sign-up">
+          <button disabled={isNotMatchPassword} type="submit" id="sign-up">
             Sign Up
           </button>
         </div>
