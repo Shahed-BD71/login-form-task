@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./App.scss";
 import { useStore } from "./context/FormContext";
 
@@ -10,18 +10,19 @@ export const initialState = {
 };
 
 export default function App() {
+  const formElRef = useRef(null);
   const [formState, dispatch] = useStore();
   const isNotMatchPassword = formState.password !== formState.repeatPass;
 
-  const clearInputs = () => {
-    dispatch({
-      type: "CLEAR_FORM",
-    });
+  const clearInputs= () => {
+    formElRef.current.reset();
+    // dispatch({
+    //   type: "CLEAR_FORM",
+    // });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    clearInputs();
     const values = {
       email: e.target.email.value,
       password: e.target.password.value,
@@ -32,7 +33,8 @@ export default function App() {
       type: "HANDLE_SUBMIT",
       payload: values,
     });
-    
+    alert('it works! check your dev tools')
+    clearInputs();
   };
   console.log("updated form values", formState);
 
@@ -43,7 +45,7 @@ export default function App() {
 
   return (
     <section className="container">
-      <form className="form-area" onSubmit={handleSubmit}>
+      <form ref={formElRef} className="form-area" onSubmit={handleSubmit}>
         <div className="form-header">
           <h2>Sign Up</h2>
           <p>Please Fill up in this Form to creat an account</p>
